@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>TreeView</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="adi/profil.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="adi/jquery.min.js"></script>
+	<style>
+		@font-face
+
+		/*perintah untuk memanggil font eksternal*/
+			{
+			font-family: 'Poppins-Regular';
+			/*memberikan nama bebas untuk font*/
+			src: url('../webfonts/Poppins-Regular.otf');
+			/*memanggil file font eksternalnya di folder nexa*/
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-family: 'Poppins-Regular', arial !important;
+		}
+
+		body {
+			font-family: 'Poppins-Regular', arial !important;
+			color: #202135 !important;
+		}
+	</style>
+</head>
+
+<body translate="no">
+	<ul id="tree1" style="cursor: pointer;">
+	</ul>
+
+	<script>
+		$.fn.extend({
+			treed: function (o) {
+
+				var openedClass = 'glyphicon-minus-sign';
+				var closedClass = 'glyphicon-plus-sign';
+
+				if (typeof o != 'undefined') {
+					if (typeof o.openedClass != 'undefined') {
+						openedClass = o.openedClass;
+					}
+					if (typeof o.closedClass != 'undefined') {
+						closedClass = o.closedClass;
+					}
+				};
+
+				//initialize each of the top levels
+				var tree = $(this);
+				tree.addClass("tree");
+				tree.find('li').has("ul").each(function () {
+					var branch = $(this); //li with children ul
+					branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>&nbsp;&nbsp;");
+					branch.addClass('branch');
+					branch.on('click', function (e) {
+						if (this == e.target) {
+							var icon = $(this).children('i:first');
+							icon.toggleClass(openedClass + " " + closedClass);
+							$(this).children().children().toggle();
+						}
+					})
+					branch.children().children().toggle();
+				});
+				//fire event from the dynamically added icon
+				tree.find('.branch .indicator').each(function () {
+					$(this).on('click', function () {
+						$(this).closest('li').click();
+					});
+				});
+				//fire event to open branch if the li contains an anchor instead of text
+				tree.find('.branch>a').each(function () {
+					$(this).on('click', function (e) {
+						$(this).closest('li').click();
+						e.preventDefault();
+					});
+				});
+				//fire event to open branch if the li contains a button instead of text
+				tree.find('.branch>button').each(function () {
+					$(this).on('click', function (e) {
+						$(this).closest('li').click();
+						e.preventDefault();
+					});
+				});
+			}
+		});
+		//Initialization of treeviews
+		$('#tree1').treed();
+		function cekvisibel(statuscek, layer, filter) {
+			alert(statuscek);
+			alert(layer);
+		}
+		function lihatlegenda(status, layer) {
+			parent.document.getElementById('operation').value = status;
+			parent.document.getElementById('kode').value = layer;
+			parent.document.getElementById('aturlegenda').click();
+		}
+		function lihatlayer(status, layer) {
+			//alert(status);
+			//alert(layer);
+			parent.document.getElementById('operation').value = status;
+			parent.document.getElementById('kode').value = layer;
+			parent.document.getElementById('lihatnode').click();
+		}
+		function cekoperation(status, layer) {
+			//alert(status);
+			//alert(layer);
+			parent.document.getElementById('operation').value = status;
+			parent.document.getElementById('kode').value = layer;
+			parent.document.getElementById('prosesnode').click();
+		}
+	</script>
+	<script>
+		window.addEventListener('message', function (event) {
+			var tempparameter = event.data.toString().split('|');
+			loaddata(tempparameter[0], tempparameter[1], tempparameter[2]);
+		});
+		function loaddata(link, api, token) {
+			var random = Math.random();
+			fetch(link + api + "?random=" + random, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json", "Authorization": "Bearer " + token
+				},
+			}).then((response) => response.json()).then((result) => {
+				var data_layer = result.content.data;
+				for (var i = 0; i < data_layer.length; i++) {
+					//alert(data_layer[i].nama);
+					if (data_layer[i].id_parent == null) {
+
+						var buttonlegenda = document.createElement("BUTTON");
+						var textbuttonlegenda = document.createTextNode("L");
+						buttonlegenda.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonlegenda.classList.add("btn-primary");
+						buttonlegenda.onclick = function () { lihatlegenda('legenda', this.id) };
+						buttonlegenda.appendChild(textbuttonlegenda);
+
+						var buttonlihat = document.createElement("BUTTON");
+						var textbuttonlihat = document.createTextNode("v");
+						buttonlihat.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonlihat.classList.add("btn-success");
+						buttonlihat.onclick = function () { lihatlayer('lihat', this.id) };
+						buttonlihat.appendChild(textbuttonlihat);
+
+						var buttonedit = document.createElement("BUTTON");
+						var textbuttonedit = document.createTextNode("e");
+						buttonedit.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonedit.classList.add("btn-warning");
+						buttonedit.onclick = function () { cekoperation('edit', this.id) };
+						buttonedit.appendChild(textbuttonedit);
+
+						var buttonhapus = document.createElement("BUTTON");
+						var textbuttonhapus = document.createTextNode("-");
+						buttonhapus.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonhapus.classList.add("btn-danger");
+						buttonhapus.onclick = function () { cekoperation('hapus', this.id) };
+						buttonhapus.appendChild(textbuttonhapus);
+
+						var buttontambah = document.createElement("BUTTON");
+						var textbuttontambah = document.createTextNode("+");
+						buttontambah.setAttribute("id", data_layer[i].id + '|' + (parseInt(data_layer[i].level) + 1) + '|' + data_layer[i].id + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttontambah.classList.add("btn-info");
+						buttontambah.onclick = function () { cekoperation('tambah', this.id) };
+						buttontambah.appendChild(textbuttontambah);
+
+						var node = document.createElement("li");
+						//node.classList.add("branch");
+						node.setAttribute("id", data_layer[i].id);
+						var textnode = document.createTextNode(" " + data_layer[i].nama);
+						if (data_layer[i].namajenismenu != 'Layer') {
+							node.appendChild(buttontambah);
+						}
+						node.appendChild(buttonedit);
+						node.appendChild(buttonhapus);
+						if (data_layer[i].namajenismenu == 'Layer') {
+							node.appendChild(buttonlihat);
+							node.appendChild(buttonlegenda);
+						}
+						node.appendChild(textnode);
+						document.getElementById("tree1").appendChild(node);
+					}
+					else {
+						var buttonlegenda = document.createElement("BUTTON");
+						var textbuttonlegenda = document.createTextNode("L");
+						buttonlegenda.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonlegenda.classList.add("btn-primary");
+						buttonlegenda.onclick = function () { lihatlegenda('legenda', this.id) };
+						buttonlegenda.appendChild(textbuttonlegenda);
+
+						var buttonlihat = document.createElement("BUTTON");
+						var textbuttonlihat = document.createTextNode("v");
+						buttonlihat.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonlihat.classList.add("btn-success");
+						buttonlihat.onclick = function () { lihatlayer('lihat', this.id) };
+						buttonlihat.appendChild(textbuttonlihat);
+
+						var buttonedit = document.createElement("BUTTON");
+						var textbuttonedit = document.createTextNode("e");
+						buttonedit.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonedit.classList.add("btn-warning");
+						buttonedit.onclick = function () { cekoperation('edit', this.id) };
+						buttonedit.appendChild(textbuttonedit);
+
+						var buttonhapus = document.createElement("BUTTON");
+						var textbuttonhapus = document.createTextNode("-");
+						buttonhapus.setAttribute("id", data_layer[i].id + '|' + data_layer[i].level + '|' + data_layer[i].id_parent + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttonhapus.classList.add("btn-danger");
+						buttonhapus.onclick = function () { cekoperation('hapus', this.id) };
+						buttonhapus.appendChild(textbuttonhapus);
+
+						var buttontambah = document.createElement("BUTTON");
+						var textbuttontambah = document.createTextNode("+");
+						buttontambah.setAttribute("id", data_layer[i].id + '|' + (parseInt(data_layer[i].level) + 1) + '|' + data_layer[i].id + '|' + data_layer[i].urut + '|' + data_layer[i].nama + '|' + data_layer[i].jenis + '|' + data_layer[i].namajenismenu + '|' + data_layer[i].asal_peta + '|' + data_layer[i].namaasalpeta + '|' + data_layer[i].api + '|' + data_layer[i].namaapipeta + '|' + data_layer[i].filenya_peta + '|' + data_layer[i].tipe_peta + '|' + data_layer[i].namatipepeta + '|' + data_layer[i].fill + '|' + data_layer[i].stroke + '|' + data_layer[i].fill_width + '|' + data_layer[i].stroke_width + '|' + data_layer[i].dash_start + '|' + data_layer[i].dash_end + '|' + data_layer[i].filenya_ikon + '|' + data_layer[i].tipe_fill + '|' + data_layer[i].namatipefill + '|' + data_layer[i].tipe_pattern + '|' + data_layer[i].namatipepattern + '|' + data_layer[i].sudut + '|' + data_layer[i].urutindex + '|' + data_layer[i].latitude + '|' + data_layer[i].longitude + '|' + data_layer[i].zoom + '|' + data_layer[i].radius + '|' + data_layer[i].kolomfilter + '|' + data_layer[i].textfilter + '|' + data_layer[i].tampilpublik + '|' + data_layer[i].namastatustampil + '|' + atob(data_layer[i].legenda));
+						buttontambah.classList.add("btn-info");
+						buttontambah.onclick = function () { cekoperation('tambah', this.id) };
+						buttontambah.appendChild(textbuttontambah);
+
+						var node = document.createElement("li");
+						//node.classList.add("branch");
+						node.setAttribute("id", data_layer[i].id);
+						var textnode = document.createTextNode(" " + data_layer[i].nama);
+						if (data_layer[i].namajenismenu != 'Layer') {
+							node.appendChild(buttontambah);
+						}
+						node.appendChild(buttonedit);
+						node.appendChild(buttonhapus);
+						if (data_layer[i].namajenismenu == 'Layer') {
+							node.appendChild(buttonlihat);
+							node.appendChild(buttonlegenda);
+						}
+						node.appendChild(textnode);
+
+						var ul = document.createElement("ul");
+						ul.setAttribute("id", "ul" + data_layer[i].id);
+						ul.appendChild(node);
+						document.getElementById(data_layer[i].id_parent).appendChild(ul);
+					}
+				}
+				$('#tree1').treed();
+			}).catch((error) => {
+				alert(error);
+			})
+		}
+	</script>
+</body>
+
+</html>

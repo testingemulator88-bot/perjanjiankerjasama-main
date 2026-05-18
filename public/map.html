@@ -1,0 +1,1730 @@
+<html>
+<SCRIPT language=JavaScript>
+  var message = "Sorry, you did an illegal operation";
+
+  function rtclickcheck(keyp) {
+    if (navigator.appName == "Netscape" && keyp.which == 3) { alert(message); return false; }
+
+    if (navigator.appVersion.indexOf("MSIE") != -1 && event.button == 2) { alert(message); return false; }
+  }
+
+  document.onmousedown = rtclickcheck;
+
+</SCRIPT>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>PETA INTERAKTIF</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="adi/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="adi/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="adi/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="adi/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <link href="adi/profil.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="adi/ol.css" type="text/css">
+  <link rel="stylesheet" href="adi/ol3gm.css" type="text/css" />
+  <script src="adi/ol3gm.js"></script>
+  <script src="adi/jquery.min.js"></script>
+  <script type="text/javascript" src="adi/cdn.jsdelivr.net_npm_ol@latest_dist_ol.js"></script>
+  <script type="text/javascript" src="adi/dist/ol-ext.js"></script>
+  <script src="adi/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="adi/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsiwLbEcjMOzXceMQ7-vJh21icjaHmlJE&loading=async&libraries=places"></script>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/place/autocomplete/xml?input=pasta&types=establishment&location=37.76999,-122.44696&radius=500&key=AIzaSyDsiwLbEcjMOzXceMQ7-vJh21icjaHmlJE"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+  <div id="divLoading"></div>
+  <div id="mySidenav" class="sidenav">
+    <div class="card card-warning shadow-none">
+      <div class="card-header" style="background-color: #15B9D9 !important;color: #ffffff;">
+        <h3 class="card-title">Base Map</h3>
+        <!-- /.card-tools -->
+        <div class="card-toolbar">
+          <button type="button" class="btn btn-warning float-right" onclick="closeNav()"><i
+              class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio1"
+            name="customRadio" value="1" onclick="tampil('googleku')">
+          <label for="customRadio1" class="custom-control-label">Google Map (ROADMAP)</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio6"
+            name="customRadio" value="6" onclick="tampil('hybridku')">
+          <label for="customRadio6" class="custom-control-label">Google Map (Hybrid)</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio8"
+            name="customRadio" value="8" onclick="tampil('googlekuterrrain')">
+          <label for="customRadio8" class="custom-control-label">Google Map (Terrain)</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio2"
+            name="customRadio" value="2" onclick="tampil('osmku')" checked="checked">
+          <label for="customRadio2" class="custom-control-label">MapQuest OSM</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio4"
+            name="customRadio" value="4" onclick="tampil('esriku')">
+          <label for="customRadio4" class="custom-control-label">Esri World Topo Map</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio9"
+            name="customRadio" value="9" onclick="tampil('esrikuImagery')">
+          <label for="customRadio9" class="custom-control-label">ESRI World Imagery</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio10"
+            name="customRadio" value="10" onclick="tampil('esrikuStreet')">
+          <label for="customRadio10" class="custom-control-label">ESRI World Street Map</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-warning" type="radio" id="customRadio11"
+            name="customRadio" value="11" onclick="tampil('esrikuGray')">
+          <label for="customRadio11" class="custom-control-label">ESRI Gray Map</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="mySidenavPencarian" class="sidenav">
+    <div class="card card-warning shadow-none">
+      <div class="card-header" style="background-color: #15B9D9 !important;color: #ffffff;">
+        <h3 class="card-title" id="judulcari">Pencarian</h3>
+        <!-- /.card-tools -->
+        <div class="card-toolbar">
+          <button type="button" class="btn btn-warning float-right" onclick="closeNavPencarian()"><i
+              class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="searchTextField" placeholder="Search..">
+          </div>
+          <input class="form-control" id="city" type="text" size="47" style="display:none;">
+        </div>
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <input type="number" class="form-control" id="carilatitude" placeholder="Latitude..">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="input-group input-group-sm">
+            <input type="number" class="form-control" id="carilongitude" placeholder="Longitude..">
+          </div>
+        </div>
+        <div class="col-md-12">&nbsp;</div>
+        <div class="col-md-12 text-center">
+          <button type="button" class="btn btn-warning btn-flat" onclick="kelokasi()" id="tombollokasi">Ke
+            lokasi</button>
+          <button type="button" class="btn btn-warning btn-flat" onclick="hapusmarker()" id="tombolcari">Hapus</button>
+        </div>
+      </div>
+
+      <!-- /.card-header -->
+    </div>
+  </div>
+  <div id="mySidenavLayer" class="sidenav">
+    <div class="card card-warning shadow-none">
+      <div class="card-header" style="background-color: #15B9D9 !important;color: #ffffff;">
+        <h3 class="card-title">Layer</h3>
+        <!-- /.card-tools -->
+        <div class="card-toolbar">
+          <button type="button" class="btn btn-warning float-right" onclick="closeNavLayer()"><i
+              class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3><b id="judultransparant">Transparansi Layer</b></h3>
+        <input id="opacity-input" type="range" min="0" max="1" step="0.01" value="0.75" style="width: 100%;"
+          class="slider" /><span id="opacity-output"></span>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body" style="display: none;">
+        <label>Kecamatan</label>
+        <div class="select2-warning col-md-12">
+          <select class="select2" data-placeholder="Semua Kecamatan" data-dropdown-css-class="select2-warning"
+            style="width: 100%;" id="kecamatan" onchange="gantikecamatan(this.value)">
+          </select>
+        </div>
+        <label>Kelurahan</label>
+        <div class="select2-warning col-md-12">
+          <select class="select2" data-placeholder="Semua Kelurahan" data-dropdown-css-class="select2-warning"
+            style="width: 100%;" id="kelurahan">
+          </select>
+        </div>
+      </div>
+      <div class="card-body">
+        <h2><b id="daftarlayer">Daftar Layer</b></h2>
+        <div id="accordion">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="mySidenavLegenda" class="sidenav">
+    <div class="card card-warning shadow-none">
+      <div class="card-header" style="background-color: #15B9D9 !important;color: #ffffff;">
+        <h3 class="card-title" id="judullegenda">Legenda</h3>
+        <!-- /.card-tools -->
+        <div class="card-toolbar">
+          <button type="button" class="btn btn-warning float-right" onclick="closeNavLegenda()"><i
+              class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body" id="legenda">
+        <div class="row" id="isianlegenda">
+          <div class="col-sm-1" style="background-color:#8B0000;width:20px;">&nbsp;</div>
+          <div class="col-sm-11">Daerah Prioritas 1<br>(Kerjasama Aktif <= 20%)</div>
+              <div class="col-sm-1" style="background-color:#FF0000;width:20px;">&nbsp;</div>
+              <div class="col-sm-11">Daerah Prioritas 2<br>(Kerjasama Aktif <= 40%)</div>
+                  <div class="col-sm-1" style="background-color:#FFD700;width:20px;">&nbsp;</div>
+                  <div class="col-sm-11">Daerah Prioritas 3<br>(Kerjasama Aktif <= 60%)</div>
+                      <div class="col-sm-1" style="background-color:#ADFF2F;width:20px;">&nbsp;</div>
+                      <div class="col-sm-11">Daerah Prioritas 4<br>(Kerjasama Aktif <= 80%)</div>
+                          <div class="col-sm-1" style="background-color:#006400;width:20px;">&nbsp;</div>
+                          <div class="col-sm-11">Daerah Prioritas 5<br>(Kerjasama Aktif > 80%)</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div id="mySidenavInfo" class="sidenavkanan">
+            <div class="card card-warning shadow-none">
+              <div class="card-header" style="background-color: #15B9D9 !important;color: #ffffff;">
+                <h3 class="card-title">Informasi</h3>
+                <!-- /.card-tools -->
+                <div class="card-toolbar">
+                  <button type="button" class="btn btn-warning float-right" onclick="closeNavInfo()"><i
+                      class="fa fa-times"></i></button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body" id="Info_Adit">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- right column -->
+            <div class="col-md-12">
+              <div class="card shadow-none" style="padding-top: 0px !important;">
+                <div class="card-header" style="background-color: rgba(223, 12, 12, 0) !important;color: #ffffff;">
+                  <!-- /.card-tools -->
+                  <div class="card-toolbar">
+                    <div class="btn-group float-right row">
+                      <button type="button" data-toggle="tooltip" data-placement="left" title="Layer Peta"
+                        onclick="openNavLayer()" class="btn btn-warning float-right btn-sm lebar"
+                        style="display: none;">
+                        <b><i class="fa fa-copy"></i>
+                          <span id="judulpanellayer">Layer Peta</span>
+                        </b>
+                      </button>
+                      <button type="button" data-toggle="tooltip" data-placement="left" title="Layer Peta"
+                        onclick="openNavPencarian()" class="btn btn-warning float-right btn-sm lebar text-white" style="display: none;"><b><i
+                            class="fas fa-search"></i>
+                          <span id="judulpanelcari">Pencarian</span></b></button>&nbsp;
+                      <button type="button" data-toggle="tooltip" data-placement="left" title="Pengaturan Peta"
+                        onclick="openNav()" class="btn btn-warning float-right btn-sm lebar"><b><i
+                            class="fa fa-wrench"></i>
+                          <span id="judulpanelpengaturan">Pengaturan</span></b></button>&nbsp;
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body" id="map">
+                  <div id="mouse-position"
+                    style="bottom:30px; right:20px; z-index:999;position:absolute;color:#000000;font-family: 'Poppins-SemiBold', sans-serif;">
+                  </div>
+                  <div id="divMainLayer"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.row -->
+
+          <script src="adi/plugins/select2/js/select2.full.min.js"></script>
+          <script>
+            $(function () {
+              //Initialize Select2 Elements
+              $('.select2').select2()
+
+              //Initialize Select2 Elements
+              $('.select2bs4').select2({
+                theme: 'bootstrap4'
+              })
+            })
+          </script>
+          <script type="text/javascript">
+
+            var vectorSourceLokasi = new ol.source.Vector({
+              projection: 'EPSG:4326'
+            });
+
+            var vectorLayerLokasi = new ol.layer.Vector({
+              source: vectorSourceLokasi,
+            });
+            var scaleLineControl = new ol.control.ScaleLine();
+
+            var scaleLineZoom = new ol.control.Zoom();
+
+            var mousePositionControl = new ol.control.MousePosition({
+              coordinateFormat: ol.coordinate.createStringXY(7),
+              projection: 'EPSG:4326',
+              // comment the following two lines to have the mouse position
+              // be placed within the map.
+              className: 'custom-mouse-position',
+              target: document.getElementById('mouse-position'),
+              undefinedHTML: '&nbsp;'
+            });
+
+
+            var osmku = new ol.layer.Tile({
+              source: new ol.source.OSM()
+            });
+
+            var googleku = new ol.layer.Tile({
+              source: new ol.source.OSM({
+                url: 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+              })
+            });
+
+            var googlekuterrrain = new ol.layer.Tile({
+              source: new ol.source.OSM({
+                url: 'http://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
+              })
+            });
+
+
+            var esriku = new ol.layer.Tile({
+              source: new ol.source.XYZ({
+                url: 'http://server.arcgisonline.com/ArcGIS/rest/services/' +
+                  'World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+              })
+            });
+
+
+            var esrikuImagery = new ol.layer.Tile({
+              source: new ol.source.XYZ({
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+              })
+            });
+
+            var esrikuStreet = new ol.layer.Tile({
+              source: new ol.source.XYZ({
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+              })
+            });
+
+            var esrikuGray = new ol.layer.Tile({
+              source: new ol.source.XYZ({
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+              })
+            });
+
+
+            var hybridku = new ol.layer.Tile({
+              'title': 'Google Maps',
+              'type': 'base',
+              visible: true,
+              'opacity': 1.000000,
+              source: new ol.source.XYZ({
+                url: 'http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&s=Ga'
+              })
+            });
+            osmku.setVisible(true);
+            esriku.setVisible(false);
+            googleku.setVisible(false);
+            hybridku.setVisible(false);
+            googlekuterrrain.setVisible(false);
+            esrikuImagery.setVisible(false);
+            esrikuStreet.setVisible(false);
+            esrikuGray.setVisible(false);
+
+            var olview = new ol.View({
+              center: ol.proj.transform([120.72013569999999, -2.330641699999999], 'EPSG:4326', 'EPSG:3857'),
+              minZoom: 2,
+              maxZoom: 25,
+              zoom: 3
+            });
+
+            var map = new ol.Map({
+              controls: [scaleLineControl, mousePositionControl, scaleLineZoom, new ol.control.OverviewMap()],
+              target: document.getElementById('map'),
+              loadTilesWhileAnimating: true,
+              loadTilesWhileInteracting: true,
+              view: olview,
+              renderer: 'canvas',
+              layers: [googleku, esriku, osmku, hybridku, googlekuterrrain, esrikuImagery, esrikuStreet, esrikuGray, vectorLayerLokasi]
+
+            });
+
+            map.on('click', function (evt) {
+
+              var place = null;
+              closeNavInfo();
+              var f = map.forEachFeatureAtPixel(
+                evt.pixel,
+                function (ft, layer) {
+                  var hasildata = [];
+                  var coord = evt.coordinate;
+                  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
+                    coord, 'EPSG:3857', 'EPSG:4326'));
+                  var xy = ol.coordinate.toStringXY(ol.proj.transform(
+                    coord, 'EPSG:3857', 'EPSG:4326'), 7);
+                  var tempxx = xy.split(",");
+                  var isinyagejson = '';
+                  var isinyagejsontambahan = '';
+                  if (layer.get('name') != undefined) {
+                    var objeto = ft.getProperties();
+                    //alert(layer.get('name'));
+                    isinyagejson += '<table id="customers2"><th colspan="3"><b>DATA</b></th>';
+
+                    for (propiedades in objeto) {
+                      if ((propiedades != 'geometry') && (propiedades != 'stroke') && (propiedades != 'TEXT_LABEL') && (propiedades != 'KODE') && (propiedades != 'LABEL_DATA') && (propiedades != 'strokewidt') && (propiedades != 'stroke-width') && (propiedades != 'stroke-opacity') && (propiedades != 'fill') && (propiedades != 'fill-opacity') && (propiedades != 'dash_start') && (propiedades != 'dash_end') && (propiedades != 'fillwidt') && (propiedades != 'gambar') && (propiedades != 'KodeKabkot') && (propiedades != 'tipe_fill') && (propiedades != 'tipe_pattern') && (propiedades != 'sudut')) {
+                        if (propiedades == 'images') {
+                          isinyagejson += '<tr><td valign="top"><b>Foto</b></td><td valign="top">:</td><i><td valign="top"><img height="100px;" src="' + objeto[propiedades] + '" id="myImg" height="100px"></b></td></tr>';
+                        } else {
+                          isinyagejson += '<tr><td valign="top"><b>' + propiedades + '</b></td><td valign="top">:</td><i><td valign="top">' + objeto[propiedades] + '</b></td></tr>';
+                        }
+                      }
+                    }
+                    var content = '<div id="Adi">Lokasi&nbsp;&nbsp;&nbsp;&nbsp;: ' + hdms + '<br />Lat, Long: ' + tempxx[1] + ', ' + tempxx[0] + '<hr><br />' + isinyagejson + '<div id="Adit"></div></div>';
+                    tampilinfo(content);
+                    openNavInfo();
+                    return ft;
+                  }
+                  else {
+                    isinyagejson += '<table id="customers2"><th colspan="3"><b>INFORMASI</b></th>';
+                    isinyagejson += '<tr><td valign="top" colspan="3">' + document.getElementById('searchTextField').value + '</td></tr>';
+
+                    isinyagejson += '</table>';
+                    var content = '<div id="Adi">Lokasi&nbsp;&nbsp;&nbsp;&nbsp;: ' + hdms + '<br />Lat, Long: ' + tempxx[1] + ', ' + tempxx[0] + '<hr><br />' + isinyagejson + '<div id="Adit"></div></div>';
+                    tampilinfo(content);
+                    openNavInfo();
+                    return ft;
+                  }
+
+                }
+              )
+
+            });
+
+            const opacityInput = document.getElementById('opacity-input');
+            const opacityOutput = document.getElementById('opacity-output');
+
+            function update() {
+              const opacity = parseFloat(opacityInput.value);
+
+              try {
+                map.getLayers().forEach(layer => {
+                  if (layer.get('name') && layer.get('name') != undefined) {
+                    layer.setOpacity(opacity);
+                  }
+                });
+              } catch (err) { }
+
+              opacityOutput.innerText = opacity.toFixed(2);
+            }
+            opacityInput.addEventListener('input', update);
+            update();
+
+            function loaddata(textparameter, pilihan) {
+              map.getLayers().forEach(layer => {
+                try {
+                  if (layer.get('name') && layer.get('name') == 'jateng') {
+                    map.removeLayer(layer)
+                  }
+                } catch (error) {
+
+                }
+              });
+              var temp = pilihan.split('|');
+              if (pilihan == ''){
+                var linkgeojson = "";
+              }
+              else {
+                
+                var linkgeojson = temp[11];
+              }
+              
+              var radius = temp[30];
+              if ((linkgeojson.includes(".geojson")) && (linkgeojson.includes("http") == false)) {
+                //geojson
+                var urlnya = textparameter + "maps_parastapainnovation-ViewGeojson?f=" + linkgeojson;
+                var sourcelyrs = new ol.source.Vector({
+                  format: new ol.format.GeoJSON(),
+                  url: urlnya,
+                  defaultDataProjection: 'EPSG:4326',
+                  projection: 'EPSG:3857',
+                })
+
+                var zoom = map.getView().getZoom();
+                if (zoom <= 3) {
+                  var font_size = 0; // arbitrary value
+                } else {
+                  var font_size = zoom * 0.65; // arbitrary value
+                }
+
+                var TipePeta = temp[12];
+                //alert(TipePeta);
+                function getStyle(feature) {
+                  if (TipePeta == 1) {
+                    // polygon
+                    var p = temp[24];
+                    if (temp[21] == 1) {
+                      // fill solid
+                      return [new ol.style.Style({
+                        fill: new ol.style.Fill({
+                          color: temp[14],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: temp[15],
+                          width: temp[16],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                      // end fill solid
+                    }
+                    else {
+                      // fill pattern
+                      return [new ol.style.Style({
+                        fill: new ol.style.FillPattern({
+                          pattern: (p != 'Image (PNG)') ? p : undefined,
+                          color: temp[14],
+                          offset: 0,
+                          scale: 1,
+                          fill: new ol.style.Fill({
+                            color: 'transparent'
+                          }),
+                          size: 1,
+                          spacing: 6,
+                          angle: temp[25],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: temp[15],
+                          lineDash: [temp[18], temp[19]],
+                          width: temp[16],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                      // end fill pattern
+                    }
+                    // end polygon
+                  }
+                  if (TipePeta == 2) {
+                    // point
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.4,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + temp[20],
+                      }),
+                    })]
+                    // end point
+                  }
+                  if (TipePeta == 3) {
+                    // line
+                    return [new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: temp[15],
+                        lineDash: [temp[18], temp[19]],
+                        width: temp[17],
+                      }),
+                    })]
+                    // end line
+                  }
+                  if (TipePeta == 4) {
+                    // polygon dari file geojson
+                    return [new ol.style.Style({
+                      fill: new ol.style.Fill({
+                        color: feature.getProperties().fill,
+                      }),
+                      stroke: new ol.style.Stroke({
+                        color: feature.getProperties().stroke,
+                        width: 1,
+                      }),
+                      text: new ol.style.Text({
+                        text: "Wrap",
+                        font: font_size + 'px Arial',
+                        text: feature.getProperties().TEXT_LABEL,
+                        fill: new ol.style.Fill({
+                          color: 'black'
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: 'black',
+                          width: 1
+                        })
+                      }),
+                    })]
+                    // end polygon dari file geojson
+                  }
+                  if (TipePeta == 5) {
+                    // line dari file geojson
+                    return [new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: feature.getProperties().stroke,
+                        lineDash: [feature.getProperties().dashstart, feature.getProperties().dashend],
+                        width: feature.getProperties().width,
+                      }),
+                    })]
+                    // end line dari file geojson
+                  }
+                  if (TipePeta == 6) {
+                    // point gambar dari file geojson
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.4,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + feature.getProperties().gambar,
+                      }),
+                    })]
+                    // end point gambar dari file geojson
+                  }
+                  if (TipePeta == 7) {
+                    // radius dari file geojson
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.475,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + feature.getProperties().gambar,
+                      }),
+                      text: new ol.style.Text({
+                        text: "Wrap",
+                        font: font_size + 'px Arial',
+                        text: feature.getProperties().TEXT_LABEL,
+                        fill: new ol.style.Fill({
+                          color: 'black'
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: 'white',
+                          width: 1
+                        })
+                      }),
+                      fill: new ol.style.Fill({
+                        color: temp[14],
+                      }),
+                      stroke: new ol.style.Stroke({
+                        color: temp[15],
+                        width: temp[16],
+                      }),
+                      geometry: function (feature) {
+                        return new ol.geom.Circle(
+                          feature.getGeometry().getCoordinates(),
+                          parseInt(radius)
+                        );
+                      }
+                    })]
+                    // end radius dari file geojson
+                  }
+                }
+
+                namelyrs = new ol.layer.Vector({
+                  name: 'jateng',
+                  tag: 'jateng',
+                  source: sourcelyrs,
+                  opacity: 0.65,
+                  style: getStyle
+                });
+                map.addLayer(namelyrs);
+                document.getElementById("divLoading").style.display = "block";
+
+                namelyrs.on('change:visible', function () {
+
+                  var vektorlayersourceload = namelyrs.getSource();
+                  vektorlayersourceload.on('featuresloadstart', function () {
+                    document.getElementById("divLoading").style.display = "block";
+                  });
+                  vektorlayersourceload.on('featuresloadend', function () {
+                    document.getElementById("divLoading").style.display = "none";
+                  });
+
+                });
+
+                namelyrs.setVisible(false);
+                namelyrs.setVisible(true);
+                namelyrs.setZIndex(1);
+                // end geojson
+              }
+              else if (linkgeojson.includes("http")) {
+                //link luar
+                var urlnya = linkgeojson;
+                var sourcelyrs = new ol.source.Vector({
+                  format: new ol.format.GeoJSON(),
+                  url: urlnya,
+                  defaultDataProjection: 'EPSG:4326',
+                  projection: 'EPSG:3857',
+                })
+
+                var zoom = map.getView().getZoom();
+                if (zoom <= 3) {
+                  var font_size = 0; // arbitrary value
+                } else {
+                  var font_size = zoom * 0.65; // arbitrary value
+                }
+
+                var TipePeta = temp[12];
+                function getStyle(feature) {
+                  if (TipePeta == 1) {
+                    // polygon
+                    var p = temp[24];
+                    if (temp[21] == 1) {
+                      // fill solid
+                      return [new ol.style.Style({
+                        fill: new ol.style.Fill({
+                          color: temp[14],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: temp[15],
+                          width: temp[16],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                      // end fill solid
+                    }
+                    else {
+                      // fill pattern
+                      return [new ol.style.Style({
+                        fill: new ol.style.FillPattern({
+                          pattern: (p != 'Image (PNG)') ? p : undefined,
+                          color: temp[14],
+                          offset: 0,
+                          scale: 1,
+                          fill: new ol.style.Fill({
+                            color: 'transparent'
+                          }),
+                          size: 1,
+                          spacing: 6,
+                          angle: temp[25],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: temp[15],
+                          lineDash: [temp[18], temp[19]],
+                          width: temp[16],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                      // end fill pattern
+                    }
+                    // end polygon
+                  }
+                  if (TipePeta == 2) {
+                    // point
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.4,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + temp[20],
+                      }),
+                    })]
+                    // end point
+                  }
+                  if (TipePeta == 3) {
+                    // line
+                    return [new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: temp[15],
+                        lineDash: [temp[18], temp[19]],
+                        width: temp[17],
+                      }),
+                    })]
+                    // end line
+                  }
+                  if (TipePeta == 4) {
+                    // polygon dari file geojson
+                    return [new ol.style.Style({
+                      fill: new ol.style.Fill({
+                        color: feature.getProperties().fill,
+                      }),
+                      stroke: new ol.style.Stroke({
+                        color: feature.getProperties().stroke,
+                        width: 1,
+                      }),
+                      text: new ol.style.Text({
+                        text: "Wrap",
+                        font: font_size + 'px Arial',
+                        text: feature.getProperties().TEXT_LABEL,
+                        fill: new ol.style.Fill({
+                          color: 'black'
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: 'black',
+                          width: 1
+                        })
+                      }),
+                    })]
+                    // end polygon dari file geojson
+                  }
+                  if (TipePeta == 5) {
+                    // line dari file geojson
+                    return [new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: feature.getProperties().stroke,
+                        lineDash: [feature.getProperties().dashstart, feature.getProperties().dashend],
+                        width: feature.getProperties().width,
+                      }),
+                    })]
+                    // end line dari file geojson
+                  }
+                }
+
+                namelyrs = new ol.layer.Vector({
+                  name: 'jateng',
+                  tag: 'jateng',
+                  source: sourcelyrs,
+                  opacity: 0.65,
+                  style: getStyle
+                });
+                map.addLayer(namelyrs);
+                document.getElementById("divLoading").style.display = "block";
+
+                namelyrs.on('change:visible', function () {
+
+                  var vektorlayersourceload = namelyrs.getSource();
+                  vektorlayersourceload.on('featuresloadstart', function () {
+                    document.getElementById("divLoading").style.display = "block";
+                  });
+                  vektorlayersourceload.on('featuresloadend', function () {
+                    document.getElementById("divLoading").style.display = "none";
+                  });
+
+                });
+
+                namelyrs.setVisible(false);
+                namelyrs.setVisible(true);
+                namelyrs.setZIndex(1);
+
+                // end link luar
+              }
+              else {
+                //link dalam
+                var urlnya = textparameter + linkgeojson;
+                var sourcelyrs = new ol.source.Vector({
+                  format: new ol.format.GeoJSON(),
+                  url: urlnya,
+                  defaultDataProjection: 'EPSG:4326',
+                  projection: 'EPSG:3857',
+                })
+
+                var zoom = map.getView().getZoom();
+                if (zoom <= 3) {
+                  var font_size = 0; // arbitrary value
+                } else {
+                  var font_size = zoom * 0.65; // arbitrary value
+                }
+
+                var TipePeta = temp[12];
+                function getStyle(feature) {
+                  if (TipePeta == 1) {
+                    // polygon
+                    var p = temp[24];
+                    if (temp[21] == 1) {
+                      // fill solid
+                      return [new ol.style.Style({
+                        fill: new ol.style.Fill({
+                          color: temp[14],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: temp[15],
+                          width: temp[16],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                      // end fill solid
+                    }
+                    else {
+                      // fill pattern
+                      return [new ol.style.Style({
+                        fill: new ol.style.FillPattern({
+                          pattern: (p != 'Image (PNG)') ? p : undefined,
+                          color: temp[14],
+                          offset: 0,
+                          scale: 1,
+                          fill: new ol.style.Fill({
+                            color: 'transparent'
+                          }),
+                          size: 1,
+                          spacing: 6,
+                          angle: temp[25],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: temp[15],
+                          lineDash: [temp[18], temp[19]],
+                          width: temp[16],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                      // end fill pattern
+                    }
+                    // end polygon
+                  }
+                  if (TipePeta == 2) {
+                    // point
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.4,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + temp[20],
+                      }),
+                    })]
+                    // end point
+                  }
+                  if (TipePeta == 3) {
+                    // line
+                    return [new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: temp[15],
+                        lineDash: [temp[18], temp[19]],
+                        width: temp[17],
+                      }),
+                    })]
+                    // end line
+                  }
+                  if (TipePeta == 4) {
+                    // polygon dari file geojson
+                    var tipe_fill = feature.getProperties().tipe_fill;
+                    //alert(tipe_fill);
+                    if (tipe_fill != 'Fill') {
+                      var p = feature.getProperties().tipe_pattern;
+                      return [new ol.style.Style({
+                        fill: new ol.style.FillPattern({
+                          pattern: (p != 'Image (PNG)') ? p : undefined,
+                          color: feature.getProperties().fill,
+                          offset: 0,
+                          scale: 1,
+                          fill: new ol.style.Fill({
+                            color: 'transparent'
+                          }),
+                          size: 1,
+                          spacing: 6,
+                          angle: feature.getProperties().sudut,
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: feature.getProperties().stroke,
+                          lineDash: [1, 1],
+                          width: 1,
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                    }
+                    else {
+                      return [new ol.style.Style({
+                        fill: new ol.style.Fill({
+                          color: feature.getProperties().fill,
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: feature.getProperties().stroke,
+                          width: 1,
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                    }
+                    // end polygon dari file geojson
+                  }
+                  if (TipePeta == 5) {
+                    // line dari file geojson
+                    return [new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: feature.getProperties().stroke,
+                        lineDash: [feature.getProperties().dashstart, feature.getProperties().dashend],
+                        width: feature.getProperties().width,
+                      }),
+                    })]
+                    // end line dari file geojson
+                  }
+                  if (TipePeta == 6) {
+                    // point gambar dari file geojson
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.475,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + feature.getProperties().gambar,
+                      }),
+                      text: new ol.style.Text({
+                        text: "Wrap",
+                        font: font_size + 'px Arial',
+                        text: feature.getProperties().TEXT_LABEL,
+                        fill: new ol.style.Fill({
+                          color: 'black'
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: 'black',
+                          width: 1
+                        })
+                      }),
+                    })]
+                    // end point gambar dari file geojson
+                  }
+                  if (TipePeta == 7) {
+                    // radius dari file geojson
+                    return [new ol.style.Style({
+                      image: new ol.style.Icon({
+                        anchor: [0.1, 0.1],
+                        size: [150, 150],
+                        offset: [0, 0],
+                        opacity: 0.75,
+                        scale: 0.475,
+                        src: textparameter + "maps_parastapainnovation-Ikon?f=" + feature.getProperties().gambar,
+                      }),
+                      text: new ol.style.Text({
+                        text: "Wrap",
+                        font: font_size + 'px Arial',
+                        text: feature.getProperties().TEXT_LABEL,
+                        fill: new ol.style.Fill({
+                          color: 'black'
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: 'white',
+                          width: 1
+                        })
+                      }),
+                      fill: new ol.style.Fill({
+                        color: temp[14],
+                      }),
+                      stroke: new ol.style.Stroke({
+                        color: temp[15],
+                        width: temp[16],
+                      }),
+                      geometry: function (feature) {
+                        return new ol.geom.Circle(
+                          feature.getGeometry().getCoordinates(),
+                          parseInt(radius)
+                        );
+                      }
+                    })]
+                    // end radius dari file geojson
+                  }
+                }
+
+                namelyrs = new ol.layer.Vector({
+                  name: 'jateng',
+                  tag: 'jateng',
+                  source: sourcelyrs,
+                  opacity: 0.65,
+                  style: getStyle
+                });
+                map.addLayer(namelyrs);
+                document.getElementById("divLoading").style.display = "block";
+
+                namelyrs.on('change:visible', function () {
+
+                  var vektorlayersourceload = namelyrs.getSource();
+                  vektorlayersourceload.on('featuresloadstart', function () {
+                    document.getElementById("divLoading").style.display = "block";
+                  });
+                  vektorlayersourceload.on('featuresloadend', function () {
+                    document.getElementById("divLoading").style.display = "none";
+                  });
+
+                });
+
+                namelyrs.setVisible(false);
+                namelyrs.setVisible(true);
+                namelyrs.setZIndex(1);
+                //end link dalam
+              }
+              //alert(urlnya);
+              //alert(temp[29]);
+              if ((temp[29] != '') && (temp[29] != '0') && (temp[29] != null)) {
+                map.getView().setCenter(ol.proj.transform([temp[28], temp[27]], 'EPSG:4326', 'EPSG:3857'));
+                map.getView().setZoom(temp[29]);
+              }
+              else {
+                map.getView().setCenter(ol.proj.transform([120.72013569999999, -2.330641699999999], 'EPSG:4326', 'EPSG:3857'));
+                map.getView().setZoom(5);
+              }
+              return;
+            }
+          </script>
+          <script>
+            function openNavPencarian() {
+              closeNavLayer();
+              closeNavLegenda();
+              closeNav();
+              if (document.getElementById("mySidenavPencarian").style.width == "350px") {
+                document.getElementById("mySidenavPencarian").style.width = "0";
+              } else {
+                document.getElementById("mySidenavPencarian").style.width = "350px";
+              }
+            }
+            function openNav() {
+              closeNavLayer();
+              closeNavLegenda();
+              closeNavPencarian();
+              if (document.getElementById("mySidenav").style.width == "350px") {
+                document.getElementById("mySidenav").style.width = "0";
+              } else {
+                document.getElementById("mySidenav").style.width = "350px";
+              }
+
+            }
+            function openNavLayer() {
+              closeNav();
+              closeNavLegenda();
+              closeNavPencarian();
+              if (document.getElementById("mySidenavLayer").style.width == "350px") {
+                document.getElementById("mySidenavLayer").style.width = "0";
+              } else {
+                document.getElementById("mySidenavLayer").style.width = "350px";
+              }
+
+            }
+
+            function openNavLegenda() {
+              closeNav();
+              closeNavLayer();
+              closeNavPencarian();
+              if (document.getElementById("mySidenavLegenda").style.width == "350px") {
+                document.getElementById("mySidenavLegenda").style.width = "0";
+              } else {
+                document.getElementById("mySidenavLegenda").style.width = "350px";
+              }
+            }
+
+            function closeNav() {
+              document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function openNavInfo() {
+              document.getElementById("mySidenavInfo").style.width = "350px";
+            }
+
+            function closeNavInfo() {
+              document.getElementById("mySidenavInfo").style.width = "0";
+            }
+            function closeNavLayer() {
+              document.getElementById("mySidenavLayer").style.width = "0";
+            }
+            function closeNavLegenda() {
+              document.getElementById("mySidenavLegenda").style.width = "0";
+            }
+            function closeNavPencarian() {
+              document.getElementById("mySidenavPencarian").style.width = "0";
+            }
+
+            function tampilinfo(isi) {
+              document.getElementById("Info_Adit").innerHTML = isi;
+            }
+
+            function removeFeatures(id) {
+              var features = id.getFeatures();
+              for (var i = 0; i < features.length && i < 100000; i++) {
+                id.removeFeature(features[i]);
+
+              }
+            }
+
+            function hapusmarker() {
+              document.getElementById('searchTextField').value = '';
+              document.getElementById('carilatitude').value = '';
+              document.getElementById('carilongitude').value = '';
+              removeFeatures(vectorSourceLokasi);
+            }
+
+            var customStyleLokasi = new ol.style.Style({
+              image: new ol.style.Icon({
+                anchor: [0.5, 0.5],
+                size: [150, 150],
+                offset: [0, 0],
+                opacity: 1,
+                scale: 0.25,
+                src: 'adi/marker.png'
+
+              }),
+              text: new ol.style.Text({
+                text: '',
+                fill: new ol.style.Fill({
+                  color: 'black'
+                }),
+                stroke: new ol.style.Stroke({
+                  color: 'yellow',
+                  width: 1
+                }),
+                offsetX: -20,
+                offsetY: 20
+              })
+            });
+
+            function ubahikon(parameter) {
+              if (document.getElementById(parameter).className == 'far fa-plus-square') {
+                document.getElementById(parameter).className = 'far fa-minus-square';
+              }
+              else {
+                document.getElementById(parameter).className = 'far fa-plus-square';
+              }
+            }
+
+            function kelokasi() {
+              if ((document.getElementById('carilatitude').value == '') || (document.getElementById('carilongitude').value == '')) {
+                parent.document.getElementById('koordinat').click();
+                return false;
+              }
+              else {
+                var i, lat, lon, geom, feature, features = [];
+                var lng = document.getElementById('carilongitude').value;
+                var lat = document.getElementById('carilatitude').value;
+
+                geom = new ol.geom.Point(
+                  ol.proj.transform([lng, lat], 'EPSG:4326', 'EPSG:3857')
+                );
+
+                vectorLayerLokasi.setZIndex(999999);
+                feature = new ol.Feature(geom);
+                feature.setStyle(customStyleLokasi);
+                features.push(feature);
+                vectorSourceLokasi.addFeatures(features);
+                map.getView().setCenter(ol.proj.transform([lng, lat], 'EPSG:4326', 'EPSG:3857'));
+                map.getView().setZoom(16);
+                return features;
+              }
+            }
+
+            function tampillayer(linkparamater, parameter) {
+              var param = parameter.split('|');
+              if (document.getElementById(param[2]).checked == true) {
+                if (param[16] == '1') {
+                  var parameterdata = parameter.split('|');
+                  if (parameterdata[2] === undefined) {
+                    return false;
+                  }
+                  var sourcelyrs = new ol.source.Vector({
+                    format: new ol.format.GeoJSON(),
+                    url: linkparamater + "maps_parastapainnovation-ViewGeojson?f=" + parameterdata[2],
+                    defaultDataProjection: 'EPSG:4326',
+                    projection: 'EPSG:3857',
+
+                  })
+                  var zoom = map.getView().getZoom();
+                  if (zoom <= 3) {
+                    var font_size = 0; // arbitrary value
+                  } else {
+                    var font_size = zoom * 0.65; // arbitrary value
+                  }
+
+                  function getStyle(feature) {
+                    if (parameterdata[3] == 1) {
+                      var p = parameterdata[15];
+                      if (parameterdata[11] == 1) {
+                        return [new ol.style.Style({
+                          fill: new ol.style.Fill({
+                            color: parameterdata[4],
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: parameterdata[5],
+                            width: parameterdata[6],
+                          }),
+                          text: new ol.style.Text({
+                            text: "Wrap",
+                            font: font_size + 'px Arial',
+                            text: feature.getProperties().TEXT_LABEL,
+                            fill: new ol.style.Fill({
+                              color: 'black'
+                            }),
+                            stroke: new ol.style.Stroke({
+                              color: 'black',
+                              width: 1
+                            })
+                          }),
+                        })]
+                      }
+                      else {
+                        return [new ol.style.Style({
+                          fill: new ol.style.FillPattern({
+                            pattern: (p != 'Image (PNG)') ? p : undefined,
+                            color: parameterdata[4],
+                            offset: 0,
+                            scale: 1,
+                            fill: new ol.style.Fill({
+                              color: 'transparent'
+                            }),
+                            size: 1,
+                            spacing: 6,
+                            angle: parameterdata[13],
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: parameterdata[5],
+                            lineDash: [parameterdata[8], parameterdata[9]],
+                            width: parameterdata[7],
+                          }),
+                          text: new ol.style.Text({
+                            text: "Wrap",
+                            font: font_size + 'px Arial',
+                            text: feature.getProperties().TEXT_LABEL,
+                            fill: new ol.style.Fill({
+                              color: 'black'
+                            }),
+                            stroke: new ol.style.Stroke({
+                              color: 'black',
+                              width: 1
+                            })
+                          }),
+                        })]
+                      }
+                    }
+                    if (parameterdata[3] == 4) {
+                      var p = parameterdata[15];
+                      return [new ol.style.Style({
+                        fill: new ol.style.Fill({
+                          color: feature.getProperties().fill,
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: feature.getProperties().stroke,
+                          width: 1,
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                    }
+                    if (parameterdata[3] == 3) {
+                      return [new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                          color: parameterdata[5],
+                          lineDash: [parameterdata[8], parameterdata[9]],
+                          width: parameterdata[7],
+                        }),
+                      })]
+                    }
+                    if (parameterdata[3] == 2) {
+                      return [new ol.style.Style({
+                        image: new ol.style.Icon({
+                          anchor: [0.5, 0.5],
+                          size: [150, 150],
+                          offset: [0, 0],
+                          opacity: 0.75,
+                          scale: 0.4,
+                          src: linkparamater + "maps_parastapainnovation-Ikon?f=" + parameterdata[10],
+                        }),
+                      })]
+                    }
+                  }
+
+                  namelyrs = new ol.layer.Vector({
+                    name: parameterdata[2],
+                    tag: parameterdata[1],
+                    source: sourcelyrs,
+                    opacity: 0.75,
+                    style: getStyle
+                  });
+                  map.addLayer(namelyrs);
+                  document.getElementById("divLoading").style.display = "block";
+
+                  namelyrs.on('change:visible', function () {
+
+                    var vektorlayersourceload = namelyrs.getSource();
+                    vektorlayersourceload.on('featuresloadstart', function () {
+                      document.getElementById("divLoading").style.display = "block";
+                    });
+                    vektorlayersourceload.on('featuresloadend', function () {
+                      document.getElementById("divLoading").style.display = "none";
+                    });
+
+                  });
+
+                  namelyrs.setVisible(false);
+                  namelyrs.setVisible(true);
+                  namelyrs.setZIndex(parameterdata[14]);
+                }
+                else {
+                  var parameterdata = parameter.split('|');
+                  //alert(parameterdata[3]);
+                  var fixlink = parameterdata[2].split('?');
+                  var keca = document.getElementById('kecamatan').value.split('|');
+                  var random = Math.random();
+                  var perubah2 = "?kecamatan=" + keca[0].trim() + "&kelurahan=" + document.getElementById('kelurahan').value.trim() + "&random=" + random;
+                  var linkakhir = fixlink[0] + perubah2;
+                  if (parameterdata[2] === undefined) {
+                    return false;
+                  }
+                  if (parameterdata[3] == 2) {
+                    var sourcelyrs = new ol.source.Vector({
+                      format: new ol.format.GeoJSON(),
+                      url: linkparamater + linkakhir,
+                      defaultDataProjection: 'EPSG:4326',
+                      projection: 'EPSG:3857',
+
+                    })
+                    var zoom = map.getView().getZoom();
+                    if (zoom <= 3) {
+                      var font_size = 0; // arbitrary value
+                    } else {
+                      var font_size = zoom * 0.65; // arbitrary value
+                    }
+                    function getStyle(feature) {
+                      return [new ol.style.Style({
+                        image: new ol.style.Icon({
+                          anchor: [0.5, 0.5],
+                          size: [150, 150],
+                          offset: [0, 0],
+                          opacity: 0.75,
+                          scale: 0.4,
+                          src: linkparamater + "maps_parastapainnovation-Ikon?f=" + parameterdata[10],
+                        }),
+                      })]
+                    }
+
+                    namelyrs = new ol.layer.Vector({
+                      name: 'layerapi' + parameterdata[1],
+                      tag: parameterdata[1],
+                      source: sourcelyrs,
+                      opacity: 0.75,
+                      style: getStyle
+                    });
+                    map.addLayer(namelyrs);
+                    document.getElementById("divLoading").style.display = "block";
+
+                    namelyrs.on('change:visible', function () {
+
+                      var vektorlayersourceload = namelyrs.getSource();
+                      vektorlayersourceload.on('featuresloadstart', function () {
+                        document.getElementById("divLoading").style.display = "block";
+                      });
+                      vektorlayersourceload.on('featuresloadend', function () {
+                        document.getElementById("divLoading").style.display = "none";
+                      });
+
+                    });
+
+                    namelyrs.setVisible(false);
+                    namelyrs.setVisible(true);
+                    namelyrs.setZIndex(parameterdata[14]);
+                  }
+
+                  if (parameterdata[3] == 1) {
+                    var sourcelyrs = new ol.source.Vector({
+                      format: new ol.format.GeoJSON(),
+                      url: linkparamater + linkakhir,
+                      defaultDataProjection: 'EPSG:4326',
+                      projection: 'EPSG:3857',
+
+                    })
+                    var zoom = map.getView().getZoom();
+                    if (zoom <= 3) {
+                      var font_size = 0; // arbitrary value
+                    } else {
+                      var font_size = zoom * 0.65; // arbitrary value
+                    }
+                    function getStyle(feature) {
+                      return [new ol.style.Style({
+                        fill: new ol.style.Fill({
+                          color: parameterdata[4],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: parameterdata[5],
+                          width: parameterdata[6],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                      })]
+                    }
+
+                    namelyrs = new ol.layer.Vector({
+                      name: 'layerapi' + parameterdata[1],
+                      tag: parameterdata[1],
+                      source: sourcelyrs,
+                      opacity: 0.75,
+                      style: getStyle
+                    });
+                    map.addLayer(namelyrs);
+                    document.getElementById("divLoading").style.display = "block";
+
+                    namelyrs.on('change:visible', function () {
+
+                      var vektorlayersourceload = namelyrs.getSource();
+                      vektorlayersourceload.on('featuresloadstart', function () {
+                        document.getElementById("divLoading").style.display = "block";
+                      });
+                      vektorlayersourceload.on('featuresloadend', function () {
+                        document.getElementById("divLoading").style.display = "none";
+                      });
+
+                    });
+
+                    namelyrs.setVisible(false);
+                    namelyrs.setVisible(true);
+                    namelyrs.setZIndex(parameterdata[14]);
+                  }
+
+                  if (parameterdata[3] == 4) {
+                    var sourcelyrs = new ol.source.Vector({
+                      format: new ol.format.GeoJSON(),
+                      url: linkparamater + linkakhir,
+                      defaultDataProjection: 'EPSG:4326',
+                      projection: 'EPSG:3857',
+
+                    })
+                    var zoom = map.getView().getZoom();
+                    if (zoom <= 3) {
+                      var font_size = 0; // arbitrary value
+                    } else {
+                      var font_size = zoom * 0.65; // arbitrary value
+                    }
+                    function getStyle(feature) {
+                      return [new ol.style.Style({
+                        image: new ol.style.Icon({
+                          anchor: [0.5, 0.5],
+                          size: [150, 150],
+                          offset: [0, 0],
+                          opacity: 0.75,
+                          scale: 0.4,
+                          src: linkparamater + "maps_parastapainnovation-Ikon?f=" + parameterdata[10],
+                        }),
+                        fill: new ol.style.Fill({
+                          color: parameterdata[4],
+                        }),
+                        stroke: new ol.style.Stroke({
+                          color: parameterdata[5],
+                          width: parameterdata[6],
+                        }),
+                        text: new ol.style.Text({
+                          text: "Wrap",
+                          font: font_size + 'px Arial',
+                          text: feature.getProperties().TEXT_LABEL,
+                          fill: new ol.style.Fill({
+                            color: 'black'
+                          }),
+                          stroke: new ol.style.Stroke({
+                            color: 'black',
+                            width: 1
+                          })
+                        }),
+                        geometry: function (feature) {
+                          return new ol.geom.Circle(
+                            feature.getGeometry().getCoordinates(),
+                            parseInt(feature.getProperties().Radius)
+                          );
+                        }
+                      })]
+                    }
+
+                    namelyrs = new ol.layer.Vector({
+                      name: 'layerapi' + parameterdata[1],
+                      tag: parameterdata[1],
+                      source: sourcelyrs,
+                      opacity: 0.75,
+                      style: getStyle
+                    });
+                    map.addLayer(namelyrs);
+                    document.getElementById("divLoading").style.display = "block";
+
+                    namelyrs.on('change:visible', function () {
+
+                      var vektorlayersourceload = namelyrs.getSource();
+                      vektorlayersourceload.on('featuresloadstart', function () {
+                        document.getElementById("divLoading").style.display = "block";
+                      });
+                      vektorlayersourceload.on('featuresloadend', function () {
+                        document.getElementById("divLoading").style.display = "none";
+                      });
+
+                    });
+
+                    namelyrs.setVisible(false);
+                    namelyrs.setVisible(true);
+                    namelyrs.setZIndex(parameterdata[14]);
+                  }
+                }
+
+              }
+              else {
+                if (param[16] == '1') {
+                  map.getLayers().forEach(layer => {
+                    try {
+                      if (layer.get('name') && layer.get('name') == param[2]) {
+                        map.removeLayer(layer)
+                      }
+                    } catch (error) {
+
+                    }
+                  });
+                }
+                else {
+                  map.getLayers().forEach(layer => {
+                    try {
+                      if (layer.get('name') && layer.get('name') == 'layerapi' + param[1]) {
+                        map.removeLayer(layer)
+                      }
+                    } catch (error) {
+
+                    }
+                  });
+                }
+              }
+            }
+
+            function tampil(val) {
+              osmku.setVisible(false);
+              esriku.setVisible(false);
+              googleku.setVisible(false);
+              hybridku.setVisible(false);
+              googlekuterrrain.setVisible(false);
+              esrikuImagery.setVisible(false);
+              esrikuStreet.setVisible(false);
+              esrikuGray.setVisible(false);
+              window[val].setVisible(true);
+              vectorLayerLokasi.setZIndex(999999);
+            }
+
+          </script>
+          <script>
+            $(document).on('select2:open', () => {
+              document.querySelector('.select2-search__field').focus();
+            });
+          </script>
+          <script>
+            window.addEventListener('message', function (event) {
+              var tempparameter = event.data.toString().split('**');
+              loaddata(tempparameter[0], tempparameter[1]);
+            });
+          </script>
+          <script>
+            function openDetailLayer(isi) {
+              parent.document.getElementById('detail').value = isi;
+              parent.document.getElementById('details').click();
+            }
+            function openDetailPotensiLayer(isi) {
+              parent.document.getElementById('detail').value = isi;
+              parent.document.getElementById('detailspotensi').click();
+            }
+            function pilih(id) {
+              parent.document.getElementById(id).click();
+            }
+          </script>
+</body>
+
+</html>
