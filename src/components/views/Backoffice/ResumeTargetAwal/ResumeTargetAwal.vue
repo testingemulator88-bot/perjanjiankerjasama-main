@@ -31,14 +31,14 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-sm-12 wow fadeInDown" v-if="leveluser == 1" style="display: none;">
+                        <div class="col-sm-12 wow fadeInDown" v-if="checkLevel(1)" style="display: none;">
                             <label>Unit Organisasi</label>
                             <v-select :options="kdunor" :reduce="(label) => label.code" label="label"
                                 v-model="defaultSelectedkdunor" @update:modelValue="onkdunorChange"
                                 style="background-color: #ffffff;padding-bottom: 10px;"></v-select>
                         </div>
                         <div class="col-sm-12 wow fadeInDown"
-                            v-if="leveluser == 1 || leveluser.includes(2) || leveluser.includes(5) || leveluser == 6">
+                            v-if="checkLevel(1) || checkLevel(2) || checkLevel(5) || checkLevel(6)">
                             <label>Pusat / Balai</label>
                             <v-select :options="kategorisatker" :reduce="(label) => label.code" label="label"
                                 v-model="defaultSelectedkategorisatker" @update:modelValue="onkategorisatkerChange"
@@ -49,6 +49,13 @@
                             <v-select :options="listtahun" :reduce="(label) => label.code" label="label"
                                 v-model="defaultSelectedtahun" @update:modelValue="ontahunChange"
                                 style="background-color: #ffffff;padding-bottom: 10px;"></v-select>
+                        </div>
+                        <div class="col-sm-12 wow fadeInDown">
+                            <label>Cari Indikator / Program</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" v-model="carikata" placeholder="Ketik kata kunci indikator...">
+                                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-search"></i></span></div>
+                            </div>
                         </div>
                         <div class="col-sm-12 wow fadeInDown">&nbsp;</div>
                         <div class="col-sm-12 text-center wow fadeInDown">
@@ -77,7 +84,7 @@
                                             <th style="width: 50px;">Satuan</th>
                                         </tr>
                                     </thead>
-                                    <template v-for="(datalist, urutlist) in datamaster" :key="urutlist">
+                                    <template v-for="(datalist, urutlist) in filteredDataMaster" :key="urutlist">
                                         <tbody>
                                             <tr>
                                                 <td class="text-center" :class="datalist.class">
@@ -336,31 +343,27 @@ export default {
         }
     },
     computed: {
-        filteredKataData() {
-            const filteredWorkers = this.carikata === ""
-                ? this.dataemon
-                : this.dataemon.filter(wo => Object.values(wo).join("").toLowerCase().indexOf(this.carikata.toLowerCase()) !== -1);
-            return filteredWorkers;
-        },
-        JumlahfilteredKataData() {
-            var jumlah = 0;
-            try {
-                if (this.filteredKataData === undefined) {
-                    jumlah = 0;
-                } else {
-                    jumlah = this.filteredKataData.length;
-                }
-            }
-            catch {
-                jumlah = 0;
-            }
-            return jumlah;
+        filteredDataMaster() {
+            if (!this.carikata) return this.datamaster;
+            const search = this.carikata.toLowerCase();
+            return this.datamaster.filter(item => {
+                return (item.textindikator && item.textindikator.toLowerCase().includes(search)) ||
+                       (item.kode && item.kode.toString().toLowerCase().includes(search));
+            });
         },
     },
     methods: {
+        checkLevel(level) {
+            if (!this.leveluser) return false;
+            // Menangani leveluser baik sebagai array maupun nilai tunggal (string/number)
+            const userLevels = Array.isArray(this.leveluser) ? this.leveluser : [this.leveluser];
+            
+            // Melakukan pengecekan dengan konversi ke string untuk menghindari tipe data yang tidak cocok
+            return userLevels.some(l => String(l) === String(level));
+        },
         async eksportresumepk(namefile) {
             var kategorisatker = '';
-            if ((this.leveluser != 1) && (!this.leveluser.includes(2)) && (!this.leveluser.includes(5))) {
+            if (!this.checkLevel(1) && !this.checkLevel(2) && !this.checkLevel(5)) {
                 if (this.secretencData.includes("_")) {
                     var temp = this.secretencData.split("_");
                     kategorisatker = temp[0];
@@ -722,7 +725,7 @@ export default {
 
             this.halamanloading = true;
             var kategorisatker = '';
-            if (this.leveluser.includes(6)) {
+            if (this.checkLevel(6)) {
                 kategorisatker = this.secretencData;
             }
             else {
@@ -730,7 +733,7 @@ export default {
             }
             var random = Math.random();
             var id = '';
-            if (this.leveluser.includes(6)) {
+            if (this.checkLevel(6)) {
                 id = this.ksatkersistem;
             }
             await mainAPIData.get("parastapainnovationCapaianReff-KategoriSatker?random=" + random + "&kdbalai=" + id).then(
@@ -874,7 +877,7 @@ export default {
 
             this.halamanloading = true;
             var kategorisatker = '';
-            if ((this.leveluser != 1) && (!this.leveluser.includes(2)) && (!this.leveluser.includes(5))) {
+            if (!this.checkLevel(1) && !this.checkLevel(2) && !this.checkLevel(5)) {
                 if (this.secretencData.includes("_")) {
                     var temp = this.secretencData.split("_");
                     kategorisatker = temp[0];
@@ -893,7 +896,7 @@ export default {
                 }
             }
             var id = '';
-            if (this.leveluser.includes(6)) {
+            if (this.checkLevel(6)) {
                 id = this.ksatkersistem;
             }
             //alert(this.leveluser);
