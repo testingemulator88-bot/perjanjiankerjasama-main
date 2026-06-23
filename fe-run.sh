@@ -17,7 +17,7 @@ case "${MODE}" in
     ;;
   *)
     echo "[ERROR] Unknown mode: ${MODE}" >&2
-    echo "Usage: ./run.sh [local|prod]" >&2
+    echo "Usage: ./fe-run.sh [local|prod]" >&2
     exit 1
     ;;
 esac

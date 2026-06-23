@@ -22,7 +22,7 @@ if /I "%MODE%"=="local" (
   if "%API_DEFAULT_URL%"=="" set "API_DEFAULT_URL=https://monika.sisda.net/2026/"
 ) else (
   echo [ERROR] Unknown mode: %MODE%
-  echo Usage: run.bat [local^|prod]
+  echo Usage: fe-run.bat [local^|prod]
   exit /b 1
 )
 
